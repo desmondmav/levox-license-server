@@ -15,24 +15,22 @@ export interface LicensePayload {
 
 // Load private key for signing
 const loadPrivateKey = (): string => {
-  const privateKeyPath = process.env.PRIVATE_KEY_PATH;
-  
-  if (!privateKeyPath) {
-    throw new Error('PRIVATE_KEY_PATH environment variable is not set');
-  }
-
   try {
-    // For local development, read from file
-    if (process.env.NODE_ENV === 'development') {
-      const fullPath = path.resolve(process.cwd(), privateKeyPath);
-      return fs.readFileSync(fullPath, 'utf8');
-    } else {
-      // For production (Vercel), the key should be in environment variable
+    // For production (Vercel), the key should be in environment variable
+    if (process.env.NODE_ENV === 'production') {
       const privateKey = process.env.PRIVATE_KEY;
       if (!privateKey) {
         throw new Error('PRIVATE_KEY environment variable is not set in production');
       }
       return privateKey;
+    } else {
+      // For local development, read from file
+      const privateKeyPath = process.env.PRIVATE_KEY_PATH;
+      if (!privateKeyPath) {
+        throw new Error('PRIVATE_KEY_PATH environment variable is not set for development');
+      }
+      const fullPath = path.resolve(process.cwd(), privateKeyPath);
+      return fs.readFileSync(fullPath, 'utf8');
     }
   } catch (error) {
     throw new Error(`Failed to load private key: ${error}`);
@@ -41,24 +39,22 @@ const loadPrivateKey = (): string => {
 
 // Load public key for verification
 const loadPublicKey = (): string => {
-  const publicKeyPath = process.env.PUBLIC_KEY_PATH;
-  
-  if (!publicKeyPath) {
-    throw new Error('PUBLIC_KEY_PATH environment variable is not set');
-  }
-
   try {
-    // For local development, read from file
-    if (process.env.NODE_ENV === 'development') {
-      const fullPath = path.resolve(process.cwd(), publicKeyPath);
-      return fs.readFileSync(fullPath, 'utf8');
-    } else {
-      // For production (Vercel), the key should be in environment variable
+    // For production (Vercel), the key should be in environment variable
+    if (process.env.NODE_ENV === 'production') {
       const publicKey = process.env.PUBLIC_KEY;
       if (!publicKey) {
         throw new Error('PUBLIC_KEY environment variable is not set in production');
       }
       return publicKey;
+    } else {
+      // For local development, read from file
+      const publicKeyPath = process.env.PUBLIC_KEY_PATH;
+      if (!publicKeyPath) {
+        throw new Error('PUBLIC_KEY_PATH environment variable is not set for development');
+      }
+      const fullPath = path.resolve(process.cwd(), publicKeyPath);
+      return fs.readFileSync(fullPath, 'utf8');
     }
   } catch (error) {
     throw new Error(`Failed to load public key: ${error}`);
