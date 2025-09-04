@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
       success: true,
       license_key: licenseKey,
       expires_at: expiresAt.toISOString(),
-      message: 'Enterprise license generated successfully' // Updated success message
+      message: 'Enterprise license generated successfully!' // Updated success message
     })
 
   } catch (error) {
